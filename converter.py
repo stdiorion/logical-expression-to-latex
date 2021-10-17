@@ -26,13 +26,13 @@ def convert(raw_text, texdict=None, negations=None):
     for key, value in texdict.items():
         res_text = res_text.replace(" " + key + " ", " " + value + " ")
 
-    # Split by "(", ")", " ", "\n", *NAGATIONS but not eliminate them
+    # Split by "(){} \n", *NAGATIONS but not eliminate them
     # Ex. "not (P and ~Q) or (~P and Q)"
     #     -> ['', 'not', ' ', '(', 'P and ~Q', ')', ' or ', '(', '~P and Q', ')', '']
     stringpart = "|".join(p for p in negations if len(p) > 1)
     if stringpart:
         stringpart = "|" + stringpart
-    re_pattern = "([\(\)\ \n" + "".join(p for p in negations if len(p) == 1) + "]" + stringpart + ")"
+    re_pattern = "([\(\)\{\}\ \n" + "".join(p for p in negations if len(p) == 1) + "]" + stringpart + ")"
     res_text_splitted = re.split(re_pattern, res_text)
 
     # Remove whitespace or empty chunk
@@ -56,6 +56,11 @@ def convert(raw_text, texdict=None, negations=None):
                 paren_depth += 1
                 negated_depths.append(paren_depth)
                 resline_aslist.append("(\overline{")
+            elif chunk == "{":
+                # not {something} -> \overline{ something }
+                paren_depth += 1
+                negated_depths.append(paren_depth)
+                resline_aslist.append("\overline{")
             elif chunk in negations:
                 # not not -> disappear
                 pass
@@ -74,6 +79,15 @@ def convert(raw_text, texdict=None, negations=None):
                 else:
                     # just ")"
                     resline_aslist.append(")")
+                paren_depth -= 1
+            elif chunk == "}":
+                if negated_depths and negated_depths[-1] == paren_depth:
+                    # "}" as the end of negation
+                    negated_depths.pop()
+                    resline_aslist.append("}")
+                else:
+                    # just "}"
+                    resline_aslist.append("}")
                 paren_depth -= 1
             elif chunk in negations:
                 # not -> negates next
