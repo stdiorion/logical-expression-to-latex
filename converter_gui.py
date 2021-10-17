@@ -17,9 +17,14 @@ class Root(tk.Tk):
 
         self.listener()
     
+    def focused(self, e):
+        self.clipboard_clear()
+        self.clipboard_append(self.src_box.get(1.0, "end-1c"))
+        self.update()
+
     def create_widgets(self):
         # source textbox
-        self.src_box = ScrolledText(self, relief="flat", padx=10, pady=10, font=(FONT_FAMILY, FONT_SIZE))
+        self.src_box = ScrolledText(self, relief="flat", padx=10, pady=10, font=(FONT_FAMILY, FONT_SIZE), undo=True, autoseparators=True)
         self.src_box.pack(fill=tk.BOTH, expand=True)
         self.src_box.focus_set()
 
@@ -29,6 +34,8 @@ class Root(tk.Tk):
         # destination textbox
         self.dst_box = ScrolledText(self, relief="flat", padx=10, pady=10, font=(FONT_FAMILY, FONT_SIZE))
         self.dst_box.pack(fill=tk.BOTH, expand=True)
+        # focus to copy
+        self.dst_box.bind("<FocusIn>", self.focused)
     
     def listener(self):
         raw_text = self.src_box.get(1.0, "end-1c")
@@ -36,10 +43,6 @@ class Root(tk.Tk):
 
         self.dst_box.delete(1.0, "end")
         self.dst_box.insert(1.0, res_text)
-
-        # self.clipboard_clear()
-        # self.clipboard_append(res_text)
-        # self.update()
 
         self.after(AUTO_UPDATE_INTERVAL, self.listener)
 
