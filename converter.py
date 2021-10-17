@@ -84,8 +84,6 @@ def convert(raw_text, texdict=None, negations=None):
 
     res_aslist.append(" ".join(resline_aslist))
 
-    print(res_aslist)
-
     return "\n".join(res_aslist)
 
 if __name__ == "__main__":
