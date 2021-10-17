@@ -16,41 +16,41 @@ $ python converter.py your-expression
 
 ### Examples
 
-`not P` ->  <img src="https://render.githubusercontent.com/render/math?math={\overline{P}}">
+`not P` ->  <img style="background: white" src="https://render.githubusercontent.com/render/math?math={\overline{P}}">
 
 ```sh
 $ python converter.py not P
 \overline{P}
 ```
 
-`not not P` -> <img src="https://render.githubusercontent.com/render/math?math={P}">
+`not not P` -> <img style="background: white" src="https://render.githubusercontent.com/render/math?math={P}">
 
 ```sh
 $ python converter.py not not P
 P
 ```
 
-`P or Q` -> <img src="https://render.githubusercontent.com/render/math?math={P %2B Q}">
+`P or Q` -> <img style="background: white" src="https://render.githubusercontent.com/render/math?math={P %2B Q}">
 
 ```sh
 $ python converter.py P or Q
 P + Q
 ```
 
-`(A xnor ~B) xnor (C xnor D)` -> <img src="https://render.githubusercontent.com/render/math?math={( A \ xnor\ \overline{B} ) \ xnor\ ( C \ xnor\ D )}">
+`(A xnor ~B) xnor (C xnor D)` -> <img style="background: white" src="https://render.githubusercontent.com/render/math?math={( A \ xnor\ \overline{B} ) \ xnor\ ( C \ xnor\ D )}">
 
 ```sh
 $ python converter.py "(A xnor ~B) xnor (C xnor D)"
 ( A \ xnor\ \overline{B} ) \ xnor\ ( C \ xnor\ D )
 ```
 
-`not (A or B) = (not A and not B)` -> <img src="https://render.githubusercontent.com/render/math?math={(\overline{ A %2B B }) = ( \overline{A} \cdot \overline{B} )}">
+`not (A or B) = (not A and not B)` -> <img style="background: white" src="https://render.githubusercontent.com/render/math?math={(\overline{ A %2B B }) = ( \overline{A} \cdot \overline{B} )}">
 
 ```sh
 $ python converter.py "not (A or B) = (not A and not B)"
 (\overline{ A + B }) = ( \overline{A} \cdot \overline{B} )
 ```
-`not {A or B} = not A and not B` -> <img src="https://render.githubusercontent.com/render/math?math={\overline{ A %2B B } = \overline{A} \cdot \overline{B}}">
+`not {A or B} = not A and not B` -> <img style="background: white" src="https://render.githubusercontent.com/render/math?math={\overline{ A %2B B } = \overline{A} \cdot \overline{B}}">
 
 ```
 $ python converter.py "not {A or B} = not A and not B"
