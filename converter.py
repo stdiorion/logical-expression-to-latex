@@ -89,7 +89,7 @@ def convert(raw_text, texdict=None, negations=None):
 if __name__ == "__main__":
     if len(sys.argv) == 1:
         print("USAGE:")
-        # print(f"if you prefer CLI $ python {__file__} text-you-want-to-convert")
-        # print(f"or you want GUI? $ python {__file__.rsplit('.', 1)[0] + '_gui.' + __file__.rsplit('.', 1)[1]}")
+        print(f"if you prefer CLI $ python {__file__} text-you-want-to-convert")
+        print(f"or you want GUI? $ python {__file__.rsplit('.', 1)[0] + '_gui.' + __file__.rsplit('.', 1)[1]}")
     else:
         print(convert(" ".join(sys.argv[1:])))
