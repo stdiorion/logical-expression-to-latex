@@ -39,8 +39,6 @@ def convert(raw_text, texdict=None, negations=None):
     # Ex. ['not', '(', 'P and ', '~', 'Q', ')', ' + ', '(', '~', 'P and Q', ')']
     res_text_splitted = [s for s in res_text_splitted if not set(s) <= {" "}]
 
-    print(res_text_splitted)
-
     negated = False
     paren_depth = 0
     negated_depths = []
@@ -52,7 +50,6 @@ def convert(raw_text, texdict=None, negations=None):
             # new line
             res_aslist.append(" ".join(resline_aslist))
             resline_aslist = []
-            print("ASD")
         elif negated:
             if chunk == "(":
                 # not (something) -> (\overline{ something })
@@ -86,8 +83,6 @@ def convert(raw_text, texdict=None, negations=None):
                 resline_aslist.append(chunk)
 
     res_aslist.append(" ".join(resline_aslist))
-
-    print(res_aslist)
 
     return "\n".join(res_aslist)
 
