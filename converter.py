@@ -39,8 +39,6 @@ def convert(raw_text, texdict=None, negations=None):
     # Ex. ['not', '(', 'P and ', '~', 'Q', ')', ' + ', '(', '~', 'P and Q', ')']
     res_text_splitted = [s for s in res_text_splitted if not set(s) <= {" "}]
 
-    print(res_text_splitted)
-
     negated = False
     paren_depth = 0
     negated_depths = []
@@ -52,7 +50,6 @@ def convert(raw_text, texdict=None, negations=None):
             # new line
             res_aslist.append(" ".join(resline_aslist))
             resline_aslist = []
-            print("ASD")
         elif negated:
             if chunk == "(":
                 # not (something) -> (\overline{ something })
@@ -94,7 +91,7 @@ def convert(raw_text, texdict=None, negations=None):
 if __name__ == "__main__":
     if len(sys.argv) == 1:
         print("USAGE:")
-        print(f"if you prefer CLI $ python {__file__} text-you-want-to-convert")
-        print(f"or you want GUI? $ python {__file__.rsplit('.', 1)[0] + '_gui.' + __file__.rsplit('.', 1)[1]}")
+        # print(f"if you prefer CLI $ python {__file__} text-you-want-to-convert")
+        # print(f"or you want GUI? $ python {__file__.rsplit('.', 1)[0] + '_gui.' + __file__.rsplit('.', 1)[1]}")
     else:
         print(convert(" ".join(sys.argv[1:])))
