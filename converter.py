@@ -1,5 +1,6 @@
 import sys
 import re
+from typing import Dict, Set
 
 DEFAULT_TEXDICT = {
     "and": "\cdot",
@@ -15,7 +16,7 @@ DEFAULT_NEGATIONS = {
     "~"
 }
 
-def convert(raw_text, texdict=None, negations=None):
+def convert(raw_text: str, texdict: Dict[str, str] = None, negations: Set[str] = None, align_equal: bool = False):
     if texdict is None:
         texdict = DEFAULT_TEXDICT
     if negations is None:
@@ -42,31 +43,41 @@ def convert(raw_text, texdict=None, negations=None):
     negated = False
     paren_depth = 0
     negated_depths = []
-    res_aslist = []
-    resline_aslist = []
+    
+    res_line = []
+    res_lines = []
+
+    if align_equal:
+        res_lines.append("\\begin{aligned}")
 
     for chunk in res_text_splitted:
         if chunk == "\\n" or chunk == "\n":
             # new line
-            res_aslist.append(" ".join(resline_aslist))
-            resline_aslist = []
+            if res_line:
+                if align_equal:
+                    if "=" in res_line:
+                        res_line[res_line.index("=")] = "&="
+                    # new line in the "aligned" block
+                    res_line.append("\\\\")
+                res_lines.append(" ".join(res_line))
+                res_line = []
         elif negated:
             if chunk == "(":
                 # not (something) -> (\overline{ something })
                 paren_depth += 1
                 negated_depths.append(paren_depth)
-                resline_aslist.append("(\overline{")
+                res_line.append("(\overline{")
             elif chunk == "{":
                 # not {something} -> \overline{ something }
                 paren_depth += 1
                 negated_depths.append(paren_depth)
-                resline_aslist.append("\overline{")
+                res_line.append("\overline{")
             elif chunk in negations:
                 # not not -> disappear
                 pass
             else:
                 # not something -> \overline{ something }
-                resline_aslist.append("\overline{" + chunk + "}")
+                res_line.append("\overline{" + chunk + "}")
 
             negated = False
 
@@ -75,30 +86,36 @@ def convert(raw_text, texdict=None, negations=None):
                 if negated_depths and negated_depths[-1] == paren_depth:
                     # ")" as the end of negation
                     negated_depths.pop()
-                    resline_aslist.append("})")
+                    res_line.append("})")
                 else:
                     # just ")"
-                    resline_aslist.append(")")
+                    res_line.append(")")
                 paren_depth -= 1
             elif chunk == "}":
                 if negated_depths and negated_depths[-1] == paren_depth:
                     # "}" as the end of negation
                     negated_depths.pop()
-                    resline_aslist.append("}")
+                    res_line.append("}")
                 else:
                     # just "}"
-                    resline_aslist.append("}")
+                    res_line.append("}")
                 paren_depth -= 1
             elif chunk in negations:
                 # not -> negates next
                 negated = True
             else:
                 # everything else
-                resline_aslist.append(chunk)
+                res_line.append(chunk)
 
-    res_aslist.append(" ".join(resline_aslist))
+    if align_equal:
+        if "=" in res_line:
+            res_line[res_line.index("=")] = "&="
+    res_lines.append(" ".join(res_line))
 
-    return "\n".join(res_aslist)
+    if align_equal:
+        res_lines.append("\\end{aligned}")
+
+    return "\n".join(res_lines)
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
