@@ -82,7 +82,10 @@ def convert(raw_text: str, texdict: Dict[str, str] = None, negations: Set[str] =
             negated = False
 
         else:
-            if chunk == ")":
+            if chunk == "(" or chunk == "{":
+                paren_depth += 1
+                res_line.append(chunk)
+            elif chunk == ")":
                 if negated_depths and negated_depths[-1] == paren_depth:
                     # ")" as the end of negation
                     negated_depths.pop()
