@@ -63,4 +63,4 @@ $ python converter.py "not {A or B} = not A and not B"
 $ python converter_gui.py
 ```
 
-![image](https://user-images.githubusercontent.com/75237455/137612570-cd304b23-399d-4d31-be4f-e30d7d0e366e.png)
+![image](https://user-images.githubusercontent.com/75237455/138011733-9f40f851-6d5d-4fc4-bbc4-8174a6fcdf2f.png)
