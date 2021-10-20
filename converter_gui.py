@@ -28,6 +28,14 @@ class Root(tk.Tk):
         self.src_box.pack(fill=tk.BOTH, expand=True)
         self.src_box.focus_set()
 
+        self.controls = tk.Frame(self, padx=10, pady=10)
+        self.controls.pack()
+
+        self.b_align_equal = tk.BooleanVar()
+        self.b_align_equal.set(False)
+        self.chk_align_equal = tk.Checkbutton(self.controls, variable=self.b_align_equal, text="Align by equal")
+        self.chk_align_equal.grid(row=0, column=0)
+
         self.separator = tk.Label(self, text="↓ Convert ↓")
         self.separator.pack()
 
@@ -37,9 +45,10 @@ class Root(tk.Tk):
         # focus to copy
         self.dst_box.bind("<FocusIn>", self.focused)
     
+    # update result every 1 second
     def listener(self):
         raw_text = self.src_box.get(1.0, "end-1c")
-        res_text = convert(raw_text)
+        res_text = convert(raw_text, align_equal=self.b_align_equal.get())
 
         self.dst_box.delete(1.0, "end")
         self.dst_box.insert(1.0, res_text)
